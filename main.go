@@ -3,11 +3,18 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/michaelptak/pokedex-go/internal/pokeapi"
 	"os"
+	"time"
 )
 
 func main() {
-	cfg := config{}
+	pokeClient := pokeapi.NewClient(5 * time.Second)
+	cfg := &config{
+		pokeApiClient: pokeClient,
+	}
+
+	// Start repl
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -18,7 +25,7 @@ func main() {
 		command, ok := getCommands()[commandName]
 
 		if ok {
-			err := command.callback(&cfg)
+			err := command.callback(cfg)
 			if err != nil {
 				fmt.Println(err)
 			}

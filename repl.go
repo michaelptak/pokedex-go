@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/michaelptak/pokedex-go/internal/pokeapi"
 	"strings"
 )
 
@@ -17,18 +18,9 @@ type cliCommand struct {
 }
 
 type config struct {
-	Next     *string
-	Previous *string
-}
-
-type Locations struct {
-	Count    int     `json:"count"`
-	Next     *string `json:"next"`
-	Previous *string `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"results"`
+	pokeApiClient pokeapi.Client
+	Next          *string
+	Previous      *string
 }
 
 func getCommands() map[string]cliCommand {
