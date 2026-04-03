@@ -7,12 +7,10 @@ import (
 	"time"
 
 	"github.com/michaelptak/pokedex-go/internal/pokeapi"
-	"github.com/michaelptak/pokedex-go/internal/pokecache"
 )
 
 func main() {
-	pokeCache := pokecache.NewCache(5 * time.Second)
-	pokeClient := pokeapi.NewClient(5*time.Second, pokeCache)
+	pokeClient := pokeapi.NewClient(5*time.Second, time.Minute*5)
 	cfg := &config{
 		pokeApiClient: pokeClient,
 	}
