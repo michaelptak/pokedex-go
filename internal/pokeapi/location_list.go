@@ -13,27 +13,33 @@ func (c *Client) ListLocations(pageURL *string) (Locations, error) {
 		url = *pageURL
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return Locations{}, err
-	}
+	body, exists := c.cache.Get(url)
+	if !exists {
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return Locations{}, err
+		}
 
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return Locations{}, err
-	}
-	defer resp.Body.Close()
+		resp, err := c.httpClient.Do(req)
+		if err != nil {
+			return Locations{}, err
+		}
+		defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return Locations{}, err
+		body, err = io.ReadAll(resp.Body)
+		if err != nil {
+			return Locations{}, err
+		}
+
+		c.cache.Add(url, body)
 	}
 
 	locations := Locations{}
-	err = json.Unmarshal(body, &locations)
+	err := json.Unmarshal(body, &locations)
 	if err != nil {
 		return Locations{}, err
 	}
 
 	return locations, nil
+
 }

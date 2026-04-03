@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/michaelptak/pokedex-go/internal/pokeapi"
 	"strings"
+
+	"github.com/michaelptak/pokedex-go/internal/pokeapi"
 )
 
 func cleanInput(text string) []string {
